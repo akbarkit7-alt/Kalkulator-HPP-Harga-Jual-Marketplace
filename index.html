@@ -13,11 +13,15 @@
       padding: 0;
     }
 
-    body {
+    html, body {
       background-color: #09090b;
       color: #f4f4f5;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
+      width: 100%;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -28,9 +32,10 @@
     .container {
       width: 100%;
       max-width: 440px;
+      position: relative;
+      z-index: 10;
     }
 
-    /* Header */
     header {
       display: flex;
       justify-content: space-between;
@@ -57,9 +62,7 @@
       font-weight: 800;
       font-size: 15px;
       letter-spacing: 0.16em;
-      background: linear-gradient(135deg, #f5e6b8 0%, #d4af37 50%, #aa8220 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #d4af37;
     }
 
     .badge-free {
@@ -70,7 +73,6 @@
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 5px;
-      letter-spacing: 0.05em;
     }
 
     .nav-link {
@@ -79,17 +81,12 @@
       text-decoration: none;
       color: #fcd34d;
       background: #18181b;
-      border: 1px solid rgba(212, 175, 55, 0.35);
+      border: 1px solid rgba(212, 175, 55, 0.4);
       padding: 7px 12px;
       border-radius: 999px;
-      transition: 0.2s;
+      cursor: pointer;
     }
 
-    .nav-link:hover {
-      background: #27272a;
-    }
-
-    /* Heading */
     .hero {
       text-align: center;
       margin-bottom: 22px;
@@ -108,13 +105,11 @@
       color: #a1a1aa;
     }
 
-    /* Card */
     .card {
       background-color: #121216;
       border: 1px solid #27272a;
       border-radius: 18px;
       padding: 20px;
-      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6);
     }
 
     .form-group {
@@ -138,9 +133,11 @@
       color: #ffffff;
       border-radius: 12px;
       padding: 12px 14px;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
-      transition: border-color 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      pointer-events: auto;
     }
 
     input[type="number"]:focus {
@@ -148,7 +145,6 @@
       border-color: #d4af37;
     }
 
-    /* Preset Buttons */
     .preset-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -162,15 +158,15 @@
       color: #e4e4e7;
       font-size: 11px;
       font-weight: 600;
-      padding: 9px 4px;
+      padding: 10px 4px;
       border-radius: 10px;
       cursor: pointer;
-      transition: 0.2s;
+      touch-action: manipulation;
     }
 
-    .preset-btn:hover, .preset-btn.active {
+    .preset-btn.active {
       border-color: #d4af37;
-      background: rgba(212, 175, 55, 0.15);
+      background: rgba(212, 175, 55, 0.18);
       color: #fcd34d;
     }
 
@@ -186,6 +182,7 @@
       color: #a1a1aa;
       font-size: 14px;
       font-weight: 600;
+      pointer-events: none;
     }
 
     .grid-2 {
@@ -194,7 +191,6 @@
       gap: 12px;
     }
 
-    /* CTA Button */
     .btn-primary {
       width: 100%;
       background: linear-gradient(135deg, #f5e6b8 0%, #d4af37 50%, #b58d22 100%);
@@ -206,19 +202,9 @@
       padding: 14px;
       cursor: pointer;
       margin-top: 6px;
-      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
-      transition: transform 0.15s, filter 0.2s;
+      touch-action: manipulation;
     }
 
-    .btn-primary:hover {
-      filter: brightness(1.08);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-
-    /* Result Box */
     .result-section {
       margin-top: 20px;
       padding-top: 18px;
@@ -259,9 +245,7 @@
     .final-val {
       font-size: 24px;
       font-weight: 800;
-      background: linear-gradient(135deg, #f5e6b8 0%, #d4af37 60%, #b58d22 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #f5d061;
     }
 
     .breakdown-box {
@@ -290,7 +274,6 @@
     .text-red { color: #f87171; font-weight: 600; }
     .text-green { color: #34d399; font-weight: 700; }
 
-    /* Cross-Sell Tools AKBAR KIT */
     .tools-box {
       background: rgba(212, 175, 55, 0.08);
       border: 1px solid rgba(212, 175, 55, 0.3);
@@ -318,7 +301,7 @@
       color: #09090b;
       font-size: 12px;
       font-weight: 800;
-      padding: 10px;
+      padding: 11px;
       border-radius: 10px;
     }
 
@@ -330,13 +313,8 @@
       color: #e4e4e7;
       font-size: 12px;
       font-weight: 600;
-      padding: 9px;
+      padding: 10px;
       border-radius: 10px;
-    }
-
-    .btn-tool-sec:hover {
-      border-color: #d4af37;
-      color: #fcd34d;
     }
 
     footer {
@@ -350,34 +328,31 @@
 <body>
 
   <div class="container">
-    <!-- Header -->
     <header>
       <div class="brand">
         <img src="logo.png" alt="AKBAR KIT" onerror="this.style.display='none'" />
         <span class="brand-title">AKBAR KIT</span>
         <span class="badge-free">GRATIS</span>
       </div>
-      <a href="https://kalkulator-akbarkit.pages.dev/" class="nav-link">
+      <a href="https://pages.dev" class="nav-link">
         Kalkulator Affiliate →
       </a>
     </header>
 
-    <!-- Title -->
     <div class="hero">
       <h1>Kalkulator HPP & Harga Jual Marketplace</h1>
       <p>Hitung harga jual anti-boncos setelah dipotong biaya admin & promo toko.</p>
     </div>
 
-    <!-- Form Card -->
     <div class="card">
       <div class="form-group">
         <label for="hpp">Modal Produk / HPP (Rp)</label>
-        <input type="number" id="hpp" value="25000" placeholder="Contoh: 25000" />
+        <input type="number" inputmode="numeric" id="hpp" value="25000" oninput="hitungHarga()" />
       </div>
 
       <div class="form-group">
         <label for="profit">Target Untung Bersih (Rp)</label>
-        <input type="number" id="profit" value="10000" placeholder="Contoh: 10000" />
+        <input type="number" inputmode="numeric" id="profit" value="10000" oninput="hitungHarga()" />
       </div>
 
       <div class="form-group">
@@ -388,7 +363,7 @@
           <button type="button" class="preset-btn" onclick="setFee(8.5, this)">Tokopedia (~8.5%)</button>
         </div>
         <div class="input-suffix">
-          <input type="number" step="0.1" id="adminFee" value="11.5" />
+          <input type="number" inputmode="decimal" step="0.1" id="adminFee" value="11.5" oninput="hitungHarga()" />
           <span>%</span>
         </div>
       </div>
@@ -396,11 +371,11 @@
       <div class="form-group grid-2">
         <div>
           <label for="packing">Biaya Packing (Rp)</label>
-          <input type="number" id="packing" value="1500" />
+          <input type="number" inputmode="numeric" id="packing" value="1500" oninput="hitungHarga()" />
         </div>
         <div>
           <label for="discount">Diskon Coret (%)</label>
-          <input type="number" id="discount" value="20" />
+          <input type="number" inputmode="numeric" id="discount" value="20" oninput="hitungHarga()" />
         </div>
       </div>
 
@@ -408,7 +383,6 @@
         Hitung Harga Jual Ideal
       </button>
 
-      <!-- Hasil Perhitungan -->
       <div class="result-section" id="resultBox">
         <div class="price-highlight">
           <div class="row-between" style="margin-bottom: 4px;">
@@ -418,3 +392,21 @@
           <div class="row-between">
             <span class="final-label">Harga Jual Akhir:</span>
             <span class="final-val" id="resHargaJual">Rp41.243</span>
+          </div>
+        </div>
+
+        <div class="breakdown-box">
+          <div class="breakdown-row">
+            <span class="text-muted">Modal + Packing:</span>
+            <span id="resTotalModal">Rp26.500</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="text-muted">Potongan Marketplace:</span>
+            <span class="text-red" id="resPotongan">-Rp4.743 (11.5%)</span>
+          </div>
+          <div class="breakdown-row">
+            <span>Net Profit Bersih:</span>
+            <span class="text-green" id="resNetProfit">Rp10.000</span>
+          </div>
+        </div>
+
