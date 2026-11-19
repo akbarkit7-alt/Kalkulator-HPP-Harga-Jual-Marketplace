@@ -162,6 +162,7 @@
       border-radius: 10px;
       cursor: pointer;
       touch-action: manipulation;
+      transition: all 0.15s ease;
     }
 
     .preset-btn.active {
@@ -203,6 +204,10 @@
       cursor: pointer;
       margin-top: 6px;
       touch-action: manipulation;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.99);
     }
 
     .result-section {
@@ -347,23 +352,23 @@
     <div class="card">
       <div class="form-group">
         <label for="hpp">Modal Produk / HPP (Rp)</label>
-        <input type="number" inputmode="numeric" id="hpp" value="25000" oninput="hitungHarga()" />
+        <input type="number" inputmode="numeric" id="hpp" value="25000" min="0" oninput="hitungHarga()" />
       </div>
 
       <div class="form-group">
         <label for="profit">Target Untung Bersih (Rp)</label>
-        <input type="number" inputmode="numeric" id="profit" value="10000" oninput="hitungHarga()" />
+        <input type="number" inputmode="numeric" id="profit" value="10000" min="0" oninput="hitungHarga()" />
       </div>
 
       <div class="form-group">
-        <label>Estimasi Biaya Admin + Layanan (%)</label>
+        <label for="adminFee">Estimasi Biaya Admin + Layanan (%)</label>
         <div class="preset-grid">
-          <button type="button" class="preset-btn active" onclick="setFee(11.5, this)">Shopee (~11.5%)</button>
-          <button type="button" class="preset-btn" onclick="setFee(10.5, this)">TikTok (~10.5%)</button>
-          <button type="button" class="preset-btn" onclick="setFee(8.5, this)">Tokopedia (~8.5%)</button>
+          <button type="button" class="preset-btn active" data-fee="11.5" onclick="setFee(11.5, this)">Shopee (~11.5%)</button>
+          <button type="button" class="preset-btn" data-fee="10.5" onclick="setFee(10.5, this)">TikTok (~10.5%)</button>
+          <button type="button" class="preset-btn" data-fee="8.5" onclick="setFee(8.5, this)">Tokopedia (~8.5%)</button>
         </div>
         <div class="input-suffix">
-          <input type="number" inputmode="decimal" step="0.1" id="adminFee" value="11.5" oninput="hitungHarga()" />
+          <input type="number" inputmode="decimal" step="0.1" id="adminFee" value="11.5" min="0" max="99" oninput="onManualFeeInput()" />
           <span>%</span>
         </div>
       </div>
@@ -371,11 +376,11 @@
       <div class="form-group grid-2">
         <div>
           <label for="packing">Biaya Packing (Rp)</label>
-          <input type="number" inputmode="numeric" id="packing" value="1500" oninput="hitungHarga()" />
+          <input type="number" inputmode="numeric" id="packing" value="1500" min="0" oninput="hitungHarga()" />
         </div>
         <div>
           <label for="discount">Diskon Coret (%)</label>
-          <input type="number" inputmode="numeric" id="discount" value="20" oninput="hitungHarga()" />
+          <input type="number" inputmode="numeric" id="discount" value="20" min="0" max="99" oninput="hitungHarga()" />
         </div>
       </div>
 
@@ -410,3 +415,78 @@
           </div>
         </div>
 
+        <div class="tools-box">
+          <p>Mau hitung komisi affiliate & simulasi profit lebih lengkap?</p>
+          <div class="tools-links">
+            <a href="https://pages.dev" class="btn-tool-pro">Buka AKBAR KIT Pro Tools →</a>
+            <a href="https://pages.dev" class="btn-tool-sec">Cek Kalkulator Komisi Affiliate</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 AKBAR KIT. Alat bantu hitung seller marketplace Indonesia.
+    </footer>
+  </div>
+
+  <script>
+    function formatRupiah(angka) {
+      return "Rp" + Math.round(angka).toLocaleString("id-ID");
+    }
+
+    function setFee(fee, btnElement) {
+      document.getElementById("adminFee").value = fee;
+      document.querySelectorAll(".preset-btn").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+      if (btnElement) {
+        btnElement.classList.add("active");
+      }
+      hitungHarga();
+    }
+
+    function onManualFeeInput() {
+      const currentFee = parseFloat(document.getElementById("adminFee").value);
+      document.querySelectorAll(".preset-btn").forEach((btn) => {
+        const btnFee = parseFloat(btn.getAttribute("data-fee"));
+        btn.classList.toggle("active", btnFee === currentFee);
+      });
+      hitungHarga();
+    }
+
+    function hitungHarga() {
+      const hpp = Math.max(0, parseFloat(document.getElementById("hpp").value) || 0);
+      const profit = Math.max(0, parseFloat(document.getElementById("profit").value) || 0);
+      const packing = Math.max(0, parseFloat(document.getElementById("packing").value) || 0);
+
+      let adminFee = parseFloat(document.getElementById("adminFee").value) || 0;
+      adminFee = Math.min(Math.max(adminFee, 0), 99);
+
+      let discount = parseFloat(document.getElementById("discount").value) || 0;
+      discount = Math.min(Math.max(discount, 0), 99);
+
+      const totalModal = hpp + packing;
+      const feeRate = adminFee / 100;
+      const discountRate = discount / 100;
+
+      // Harga Jual Akhir = (HPP + Packing + Target Profit) / (1 - Biaya Admin)
+      const hargaJual = (totalModal + profit) / (1 - feeRate);
+      const potonganMarketplace = hargaJual * feeRate;
+
+      // Harga Coret = Harga Jual Akhir / (1 - Diskon Coret)
+      const hargaCoret = discountRate > 0 ? hargaJual / (1 - discountRate) : hargaJual;
+
+      document.getElementById("resHargaCoret").textContent = formatRupiah(hargaCoret);
+      document.getElementById("resHargaJual").textContent = formatRupiah(hargaJual);
+      document.getElementById("resTotalModal").textContent = formatRupiah(totalModal);
+      document.getElementById("resPotongan").textContent = `-${formatRupiah(potonganMarketplace)} (${adminFee}%)`;
+      document.getElementById("resNetProfit").textContent = formatRupiah(profit);
+    }
+
+    // Jalankan kalkulasi awal saat halaman dimuat
+    document.addEventListener("DOMContentLoaded", hitungHarga);
+  </script>
+
+</body>
+</html>
